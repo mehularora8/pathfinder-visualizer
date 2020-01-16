@@ -47,10 +47,12 @@ void outputGrid(Grid<char> g){
 }
 
 Grid<char> makegrid(){
+    //Output instructions
     cout << "Use # to denote a blocked cell, a dot character (.) to denote open "
          << "cell, T to denote the target and a S to denote start." << endl;
     int rows = getInteger("Enter nRows: ");
     int columns = getInteger("Enter nColumns: ");
+    //Initialize grid
     Grid<char> g(rows, columns);
     for(int i = 0; i < rows; i++){
         string row = getLine("Enter row " + integerToString(i + 1) + ":");
@@ -64,26 +66,10 @@ Grid<char> makegrid(){
     return g;
 }
 
-/*Grid<char> makeDjikstraGrid(){
-    cout << "Use # to denote a blocked cell, an integer to denote weights on the grid,"
-            " T to denote the target and a S to denote start." << endl;
-    int rows = getInteger("Enter nRows: ");
-    int columns = getInteger("Enter nColumns: ");
-    Grid<char> g(rows, columns);
-    for(int i = 0; i < rows; i++){
-        string row = getLine("Enter row " + integerToString(i + 1) + ":");
-        while(row.length() != columns){
-            row = getLine("Invalid row length. Enter row " + integerToString(i + 1) + ":");
-        }
-        for(int j = 0; j < columns; j++){
-            g[i][j] = row[j];
-        }
-    }
-    return g;
-}*/
-
 Vector<int> searchGrid(const Grid<char> g, char s){
+    //Return value
     Vector<int> foundNode;
+    //N(numRow * numCol) search grid for character 'S'
     for(int i = 0; i < g.numRows(); i++){
         for(int j = 0; j < g.numCols(); j++){
             if(g[i][j] == s){
@@ -95,6 +81,7 @@ Vector<int> searchGrid(const Grid<char> g, char s){
     }
     return {};
 }
+
 bool bfs(Grid<char>& g, Vector<int> start){
     Queue<Vector<int>> q;
     Set<Vector<int>> set;
@@ -217,7 +204,6 @@ int main() {
         cout << endl;
         cout << "1. Explore path using BFS." << endl;
         cout << "2. Explore path using DFS." << endl;
-        //cout << "3. Explore path using Djikstra's Algorithm." << endl;
         cout << "4. Quit" << endl;
         int choice = getInteger("Enter choice: ");
         if (choice == 4){
@@ -226,7 +212,7 @@ int main() {
         }
         Grid<char> path;
 
-        int second_choice = getInteger("1. Use default grid, 2. Make your own grid, 3. Make Djikstra grid");
+        int second_choice = getInteger("1. Use default grid, 2. Make your own grid");
         if(second_choice == 1){
             path = DEFAULT_PATH;
         } else if(second_choice == 2){
@@ -260,8 +246,6 @@ int main() {
                 cout << "No solution found." << endl;
             }
             //dfs
-        } else if (choice == 3){
-            //TODO: Djikstra
         } else {
             cout << "Enter valid choice." << endl;
             continue;
