@@ -108,33 +108,24 @@ bool bfs(Grid<char>& g, Vector<int> start){
         }
         clearConsole();
         outputGrid(g);
-
         //If neighbors have open space and are inbounds, enqueue to explore
-        if(g.inBounds(i + 1, j) && g[i + 1][j] != '#'){
-            Vector<int> newPoint;
-            newPoint.add(i + 1);
-            newPoint.add(j);
-            q.enqueue(newPoint);
-        } if(g.inBounds(i - 1, j) && g[i - 1][j] != '#'){
-            Vector<int> newPoint;
-            newPoint.add(i - 1);
-            newPoint.add(j);
-            q.enqueue(newPoint);
-        } if(g.inBounds(i, j + 1) && g[i][j + 1] != '#'){
-            Vector<int> newPoint;
-            newPoint.add(i);
-            newPoint.add(j + 1);
-            q.enqueue(newPoint);
-        } if(g.inBounds(i, j - 1) && g[i][j - 1] != '#'){
-            Vector<int> newPoint;
-            newPoint.add(i);
-            newPoint.add(j - 1);
-            q.enqueue(newPoint);
+        for(int x = -1; x <= 1; x++){
+            for(int y = -1; y <= 1; y++){
+                //Both abs(x), abs(y) should not be > 0 since diagonal moves are not allowed.
+                if(!(abs(x) == abs(y))){
+                    if(g.inBounds(i + x, j + y) && g[i + x][j + y] != '#'){
+                        Vector<int> newPoint;
+                        newPoint.add(i + x);
+                        newPoint.add(j + y);
+                        q.enqueue(newPoint);
+                    }
+                }
+            }
         }
         //Add visited point to seen set
         set.add(currPoint);
         //Sleep to see path taken.
-        this_thread::sleep_for(chrono::milliseconds(300));
+        this_thread::sleep_for(chrono::milliseconds(400));
     }
 
     return false;
@@ -142,7 +133,7 @@ bool bfs(Grid<char>& g, Vector<int> start){
 
 bool dfs(Grid<char>& g, Vector<int> start, Set<Vector<int>>& seen){
 
-    this_thread::sleep_for(chrono::milliseconds(100));
+    this_thread::sleep_for(chrono::milliseconds(200));
     int i = start[0];
     int j = start[1];
 
@@ -150,6 +141,7 @@ bool dfs(Grid<char>& g, Vector<int> start, Set<Vector<int>>& seen){
     if(g[i][j] == 'T'){
         return true;
     }
+
     //Failure condition
     if(seen.contains(start)){
         return false;
@@ -164,33 +156,19 @@ bool dfs(Grid<char>& g, Vector<int> start, Set<Vector<int>>& seen){
     seen.add(start);
     //Check if all possible options are inbounds and are not walls
     //Backtracking recurse
-    if(g.inBounds(i + 1, j) && g[i + 1][j] != '#'){
-        Vector<int> newPoint;
-        newPoint.add(i + 1);
-        newPoint.add(j);
-        if (dfs(g, newPoint, seen)){
-            return true;
-        }
-    } if(g.inBounds(i - 1, j) && g[i - 1][j] != '#'){
-        Vector<int> newPoint;
-        newPoint.add(i - 1);
-        newPoint.add(j);
-        if (dfs(g, newPoint, seen)){
-            return true;
-        }
-    } if(g.inBounds(i, j + 1) && g[i][j + 1] != '#'){
-        Vector<int> newPoint;
-        newPoint.add(i);
-        newPoint.add(j + 1);
-        if (dfs(g, newPoint, seen)){
-            return true;
-        }
-    } if(g.inBounds(i, j - 1) && g[i][j - 1] != '#'){
-        Vector<int> newPoint;
-        newPoint.add(i);
-        newPoint.add(j - 1);
-        if (dfs(g, newPoint, seen)){
-            return true;
+    for(int x = -1; x <= 1; x++){
+        for(int y = -1; y <= 1; y++){
+            //Both abs(x), abs(y) should not be > 0 since diagonal moves are not allowed.
+            if(!(abs(x) == abs(y))){
+                if(g.inBounds(i + x, j + y) && g[i + x][j + y] != '#'){
+                    Vector<int> newPoint;
+                    newPoint.add(i + x);
+                    newPoint.add(j + y);
+                    if (dfs(g, newPoint, seen)){
+                        return true;
+                    }
+                }
+            }
         }
     }
 
